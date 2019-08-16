@@ -34,6 +34,8 @@
         </p>
         </div>
         
+
+        <p>博客地址：<a href="https://sobird.me/mapbar-longitude-latitude-encode-decode.htm">Mapbar经纬坐标偏移的加/解密算法</a> </p>
     </div>
     
     <script>
@@ -65,7 +67,6 @@
             var _x = parseFloat(((Math.cos(y / 100000)) * (x / 18000)) + ((Math.sin(x / 100000)) * (y / 9000)) + x);
             var _y = parseFloat(((Math.sin(y / 100000)) * (x / 18000)) + ((Math.cos(x / 100000))*(y/9000))+y);
 
-            
             return [_x / 100000.0, _y / 100000.0];
         }
 
