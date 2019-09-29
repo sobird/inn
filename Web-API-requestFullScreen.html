@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Javascript原生全屏API</title>
+
+<style type="text/css">
+body{
+	color: #333;
+    font-family: "微软雅黑","Times New Roman",Times,serif;
+    font-size: 14px;
+}
+a, a:visited {
+    color: #05c;
+    text-decoration: none;
+}
+a:hover{
+	text-decoration:underline;
+}
+#header{
+	background: none repeat scroll 0 0 #f5f5f5;
+	border-bottom: 1px solid #e5e5e5;
+	padding: 10px 40px;
+}
+h1{
+	font-size:20px;
+	float: left;
+	color: #999;
+}
+h2{
+	font-size:16px;
+	margin-bottom:10px;
+}
+#middle{
+	padding: 0 40px;
+}
+#footer{
+	border-top: 1px solid #EBEBEB;
+	padding: 10px 40px;
+	margin-top:20px;
+}
+
+.linkpost{
+	float: right;
+	font-size:12px;
+	margin-top:10px;
+}
+
+.section{
+	padding: 20px 0;
+}
+/**/
+.wrap{
+	width:380px;
+	margin:0 auto;
+}
+.case{
+	background:#f0f0f0;
+	border:2px solid #fff;
+	box-shadow: 0 0 2px gray;
+	padding: 20px;
+}
+.case>div{
+	background:#ddd;
+	border-radius:5px;
+	border:1px solid #fff;
+	box-shadow: 0 0 2px #ddd;
+	padding: 10px;
+	overflow-x: auto;
+	margin-bottom:20px;
+}
+
+
+</style>
+</head>
+<body id="case">
+<header id="header" class="clearfix">
+	<h1>Javascript原生全屏API演示页面</h1>
+	<a class="linkpost" href="https://sobird.me/web-api-requestfullscreen.htm"><< 回到相关文章</a>
+</header>
+<div id="middle">
+	<div class="section clearfix">
+		<div class="wrap" id="fullscreen">
+			<div class="case">
+				<div id="status">
+					
+				</div>
+				<button id="isgofullScreen">进入全屏</button>
+			</div>
+		</div>
+
+	</div>
+	
+</div>
+<footer id="footer">
+	<p class="copyleft">&copy;2012 Copyleft SOBIRD.ME</p>
+</footer>
+<script type="text/javascript">
+function isFullscreenEnabled() {
+  return  (
+    document.fullscreenEnabled ||
+    document.mozFullScreenEnabled ||
+    document.webkitFullscreenEnabled ||
+    document.msFullscreenEnabled
+  );
+}
+
+// 进入全屏
+function requestFullscreen(ele) {
+  if (ele.requestFullscreen) {
+    // mozilla proposal
+    return ele.requestFullscreen();
+  } else if(element.requestFullscreen) {
+    // W3C Proposal
+    return ele.requestFullscreen();
+  } else if (ele.mozRequestFullScreen) {
+    // Firefox (works in nightly)
+    return ele.mozRequestFullScreen();
+  } else if (ele.webkitRequestFullscreen) {
+    // Webkit (works in Safari and Chrome Canary)
+    return ele.webkitRequestFullscreen();
+  } else if (ele.msRequestFullscreen) {
+    // IE
+    return ele.msRequestFullscreen();
+  }
+}
+
+// 退出全屏
+function exitFullscreen() {
+  if(document.cancelFullScreen) {
+    // mozilla proposal
+    document.cancelFullScreen();
+  }else if(document.exitFullScreen) {
+    // W3C Proposal
+    document.exitFullScreen();
+  } else if(document.mozCancelFullScreen) {
+    // Firefox (works in nightly)
+    document.mozCancelFullScreen();
+  } else if(document.webkitExitFullscreen) {
+    // Webkit (works in Safari and Chrome Canary) or document.webkitCancelFullScreen(); 
+    document.webkitExitFullscreen();
+  } else if(document.msExitFullscreen) {
+    // IE
+    document.msExitFullscreen();
+  }
+}
+
+// 当前是否全屏
+function isFullScreen() {
+  return  !! (
+      document.fullscreen || 
+      document.mozFullScreen ||                         
+      document.webkitIsFullScreen ||       
+      document.webkitFullScreen || 
+      document.msFullScreen 
+   );
+}
+
+var fullscreen = document.getElementById('fullscreen');
+var _status = document.getElementById('status');
+var btn = document.getElementById('isgofullScreen');
+
+if (isFullscreenEnabled()) {
+	_status.innerHTML = '恭喜！您的浏览器支持Javascript原生全屏API，<br /> 单击下面的按钮即可进入全屏模式';
+	
+	var noFullscreen = function(){
+		exitFullscreen();
+		
+	};
+
+	var goFullscreen = function(){
+		requestFullscreen(fullscreen);
+		
+	};
+	addDomListener(btn, 'click',goFullscreen);
+
+
+	addDomListener(fullscreen, 'fullscreenchange', function(e) {
+	  if (isFullScreen()) {
+	    /* make it look good for fullscreen */
+	    removeDomListener(btn, 'click',goFullscreen);
+		addDomListener(btn, 'click',noFullscreen);
+		_status.innerHTML = '你已经进入全屏模式，<br />点击下面的按钮可以退出全屏';
+		btn.innerHTML = '退出全屏';
+	  } else {
+	    /* return to the normal state in page */
+
+	    removeDomListener(btn, 'click', noFullscreen);
+		addDomListener(btn, 'click', goFullscreen);
+		_status.innerHTML = '你已经退出全屏，<br />点击下面的按钮可以进入全屏';
+		btn.innerHTML = '进入全屏';
+	  }
+	});
+} else {
+	_status.innerHTML = '抱歉！您的浏览器不支持Javascript原生全屏API,<br /> 你需要Safari 5.1+, Chrome Canary, or Firefox Nightly Firefox10+浏览器才能支持该API';
+	btn.parentNode.removeChild(btn);
+}
+
+
+
+
+//----------------------------------------------------------------
+/**
+ * 跨浏览器事件处理程序
+ * 
+ * @param {Element} instance  [Dom元素对象]
+ * @param {String} eventName [事件类型名称]
+ * @param {Function} handler   [函数句柄]
+ * @param {Boolean} capture   [是否使用事件捕获模式]
+ */
+function addDomListener (instance, eventName, handler, useCapture){
+	if (instance.addEventListener) {
+		//DOM2级事件处理程序
+		instance.addEventListener(eventName, handler, useCapture);
+	} else if (instance.attachEvent){
+		instance.attachEvent('on' + eventName, handler);
+	} else {
+		//DOM0级事件处理程序
+		instance['on' + eventName] = handler;
+	}
+}
+
+
+//----------------------------------------------------------------
+/**
+ * 跨浏览器事件处理程序
+ * 
+ * @param {Element} instance  [Dom元素对象]
+ * @param {String} eventName [事件类型名称]
+ * @param {Function} handler   [函数句柄]
+ * @param {Boolean} capture   [是否使用事件捕获模式]
+ */
+function removeDomListener (instance, eventName, handler, useCapture){
+	if (instance.removeEventListener) {
+		//DOM2级事件处理程序
+		instance.removeEventListener(eventName, handler, useCapture);
+	} else if (instance.detachEvent){
+		instance.detachEvent('on' + eventName, handler);
+	} else {
+		//DOM0级事件处理程序
+		instance['on' + eventName] = null;
+	}
+}
+</script>
+</body>
+</html>
