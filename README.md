@@ -1,8 +1,7 @@
-# 个人博客资源库
-> 博客DEMO演示等资源
+*个人博客演示等资源*
 
 ## 博客插件
-> 博客正在使用的插件
+*个人博客使用的插件*
 
 * [Akismet Anti-Spam](https://wordpress.org/plugins/akismet/)
 * [Google XML Sitemaps](https://wordpress.org/plugins/google-sitemap-generator/)
@@ -12,12 +11,11 @@
 * [Comment Info Detector](https://wordpress.org/plugins/comment-info-detector/)
 
 ## 博客历史
-* 2009年9月-2011年3月 优智科技 使用域名crossyou.cn 虚拟空间 110￥/年
-* 2011年3月-2012年10月 瑞豪开源 美国VPS 68￥/月
-* 2012年11月-2013年10月 Linode VPS 19.95$/月
-* 2013年10月-2014年7月 百度云虚拟空间 免费
-* 2014年7月-2016年1月 Linode 10$/月 并更换域名为sobird.me
-* 2016年1月-2016年11月 衡天小张 VPS 99￥/月
-* 2017年5月-2018年7月 优智科技 虚拟空间 110￥/年
-* 2018年7月- 现在 衡天小张 VPS 700￥/年
-
+* `2018.07` - `present` 衡天小张 VPS 700￥/年
+* `2017.05` - `2018.07` 优智科技 虚拟空间 110￥/年
+* `2016.01` - `2016.11` 衡天小张 VPS 99￥/月
+* `2014.07` - `2016.01` Linode 10$/月 并更换域名为sobird.me
+* `2013.10` - `2014.07` 百度云虚拟空间 免费
+* `2012.11` - `2013.10` Linode VPS 19.95$/月
+* `2011.03` - `2012.10` 瑞豪开源 美国VPS 68￥/月
+* `2009.09` - `2011.03` 优智科技 使用域名crossyou.cn 虚拟空间 110￥/年
