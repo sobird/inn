@@ -3,6 +3,7 @@
 * [Mapbar经纬度坐标加解密](./MapBar-Coord-Convert.html)
 * [Javascript原生全屏API](./Web-API-requestFullScreen.html)
 * [知道问题页Buttom宽度背景自适应](./Baidu-Zhidao-button-optimize.html)
+* [JavaScript数组去重 压力/性能 测试](./JavaScript-Array-Unique-Test.html)
 
 ## 博客插件
 *个人博客使用的插件*

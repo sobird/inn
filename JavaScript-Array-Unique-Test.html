@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>JavaScript数组去重 压力/性能 测试</title>
+</head>
+<body>
+  <h1>JavaScript数组去重 压力/性能 测试</h1>
+
+  <p>请在下面的框中填写要测试数组长度, 注：设置的值不要太大哦，否则会死的！</p>
+  <p><input type="text" id="argLen" /><button onclick="tester()">开始测试</button></p>
+
+  <h4>测试结果将会在下面显示</h4>
+  <div id="result"></div>
+
+  <script type="text/javascript">
+  	var result = document.getElementById('result');
+
+  	function tester() {
+  	  var argLen = document.getElementById('argLen');
+	  var l = parseInt(argLen.value);
+	  if(typeof l != 'number' || !l){
+		alert('请填写正确的数组长度');
+	  }
+
+	  var html = '<table><thead><tr><th>方法</th><th>耗时</th></tr></thead><tbody>';
+	  var test_array = generateTestArray(l);
+	  var start = new Date().getTime();
+	  unique1(test_array);
+	  html += '<tr><td>双层循环</td> <td>' + (new Date().getTime() - start) + 'ms</td></tr>';
+
+	  start = new Date().getTime();
+	  unique2(test_array);
+	  html += '<tr><td>对象键值对</td> <td>' + (new Date().getTime() - start) + 'ms</td></tr>';
+
+	  start = new Date().getTime();
+	  unique3(test_array);
+	  html += '<tr><td>indexOf方法</td> <td>' + (new Date().getTime() - start) + 'ms</td></tr>';
+
+	  start = new Date().getTime();
+	  unique4(test_array);
+	  html += '<tr><td>相邻元素</td> <td>' + (new Date().getTime() - start) + 'ms</td></tr>';
+
+	  start = new Date().getTime();
+	  unique5(test_array);
+	  html += '<tr><td>Map</td> <td>' + (new Date().getTime() - start) + 'ms</td></tr>';
+
+	  start = new Date().getTime();
+	  unique6(test_array);
+	  html += '<tr><td>Set</td> <td>' + (new Date().getTime() - start) + 'ms</td></tr>';
+
+	  result.innerHTML = html;
+  	}
+
+  	/**
+	 * 生成一个测试数组
+	 * 
+	 * @param {Number} len [数组长度]
+	 * @return {Array} [所生成的测试数组]
+	 */
+	function generateTestArray(len){
+	  if(typeof len != 'number'){
+		return [];
+	  }
+	  var _testArg = [];
+	  for(var i = 0; i < len; i++){
+		_testArg.push(Math.ceil(Math.pow(Math.random()*10, 3)));
+	  }
+	  return _testArg;
+	}
+
+	// 双层循环
+	function unique1(arr) {
+	  var res = [];
+	  for(var i = 0; i < arr.length; i++) {
+	    for(var  j = 0; j < res.length; j++) {
+	      if(arr[i] === res[j]) {
+	        break;
+	      }
+	    }
+	    if(j === res.length) {
+	      res.push(arr[i]);
+	    }
+	  }
+	  return res;
+	}
+
+	// 对象键值对
+	function unique2(arr) {
+	  let res = [];
+	  let obj = {};
+	  for(let i = 0; i < arr.length; i++) {
+	    if(!obj[arr[i]]) {
+	      res.push(arr[i]);
+	      obj[arr[i]] = true;
+	    }
+	  }
+	  return res;
+	}
+
+	// indexOf方法
+	function unique3(arr) {
+	  let res = [];
+	  for (let i = 0; i < arr.length; i++) {
+	    if (res.indexOf(arr[i]) === -1) {
+	      res.push(arr[i]);
+	    }
+	  }
+	  return res;
+	}
+
+	// 相邻元素
+	function unique4(arr) {
+	  arr = arr.sort();
+	  let res = [];
+	  for (let i = 0; i < arr.length; i++) {
+	    if (arr[i] !== arr[i-1]) {
+	      res.push(arr[i]);
+	    }
+	  }
+	  return res;
+	}
+
+	// Map
+	function unique5 (arr) {
+	  let res = [];
+	  let tmp = new Map();
+	  for(let i = 0; i < arr.length; i++){
+	    if(!tmp.has(arr[i])){
+	      tmp.set(arr[i], true);
+	      res.push(arr[i]);
+	    }
+	  }
+	  return res;
+	}
+
+	// Set
+	function unique6 (arr) {
+	  return [...new Set(arr)];
+	}
+  </script>
+</body>
+</html>
