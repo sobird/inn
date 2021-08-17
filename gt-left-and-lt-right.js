@@ -38,7 +38,58 @@ function getMidNum(nums) {
   return res;
 }
 
+// 单调栈
+function getMidNum(nums) {
+  let res = [];
+  let maxn = -Infinity;
+
+  for(let i = 0; i < nums.length; i++) {
+    while(res.length !== 0 && res[res.length - 1] >= nums[i]) {
+      res.pop();
+    }
+
+    if(nums[i] > maxn) {
+      res.push(nums[i]);
+    }
+
+    maxn = Math.max(maxn, nums[i]);
+  }
+  return res;
+}
+
 let nums = [21, 11, 45, 56, 9, 66, 77, 89, 78, 68, 100, 120, 111]
 let res = getMidNum(nums);
-
 console.log(res);
+
+/**
+ * 单调栈：
+ * 单调栈是一种特殊的栈，如果出栈的元素是单调增的，那就是单调递增栈，如果出栈的元素是单调减的，那就是单调递减栈。
+ * 这里用 [a,b,c] 表示一个栈。 其中 左侧为栈底，右侧为栈顶。
+ * [1,2,3,4] 就是一个单调递减栈
+ * [3,2,1] 就是一个单调递增栈
+ * [1,3,2] 就不是一个合法的单调栈
+ * 
+ * Next Greater Element
+ */
+
+function nextGreaterElement(nums) {
+  let res = [];
+  let tmp = [];
+
+  for(let i = nums.length - 1; i >=0; i--) {
+    console.log(tmp);
+
+    while(tmp.length !== 0 && tmp[tmp.length - 1] <= nums[i]) {
+      tmp.pop();
+    }
+
+    console.log(tmp);
+
+    res[i] = tmp.length === 0 ? -1 : tmp[tmp.length - 1];
+    tmp.push(nums[i]);
+  }
+
+  return res;
+}
+
+console.log('nextGreaterElement', nextGreaterElement([2,1,2,4,3]));
