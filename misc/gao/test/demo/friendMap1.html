@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+#loading {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 999;
+    background: url("../../images/loading.jpg") no-repeat center center #FFFAD1;
+    top: 0;
+    left: 0;
+    text-align: center;
+    line-height: 300px;
+    font-size: 32px;
+    color: #666;
+}
+</style>
+<div id="loading">正在加载...</div>
+<div id="theEnd"></div>
+<!--<script type="text/javascript" src="customControl.js"></script>-->
+<script type="text/javascript" src="http://liumeijun.com/sm/soundmanager2-nodebug-jsmin.js"></script>
+<script type="text/javascript">
+(function(a,b){"use strict";var c=function(){var a=[["requestFullscreen","exitFullscreen","fullscreenchange","fullscreen","fullscreenElement"],["webkitRequestFullScreen","webkitCancelFullScreen","webkitfullscreenchange","webkitIsFullScreen","webkitCurrentFullScreenElement"],["mozRequestFullScreen","mozCancelFullScreen","mozfullscreenchange","mozFullScreen","mozFullScreenElement"]];for(var c=0,d=a.length;c<d;c++){var e=a[c];if(e[1]in b)return e}}();if(!c)return a.screenfull=!1;var d="ALLOW_KEYBOARD_INPUT"in Element,e={init:function(){return b.addEventListener(c[2],function(a){e.isFullscreen=b[c[3]],e.element=b[c[4]],e.onchange(a)}),this},isFullscreen:b[c[3]],element:b[c[4]],request:function(a){a=a||b.documentElement,a[c[0]](d&&Element.ALLOW_KEYBOARD_INPUT),b.isFullscreen||a[c[0]]()},exit:function(){b[c[1]]()},toggle:function(a){this.isFullscreen?this.exit():this.request(a)},onchange:function(){}};a.screenfull=e.init()})(window,document)
+</script>
+<title>地图类型控件</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+
+// 济宁市坐标：116.609082,35.42297
+// 商丘坐标：115.66287,34.449425
+//北京市坐标：
+//var JN_POINT=new BMap.Point(116.609082,35.42297);
+//var SQ_POINT=new BMap.Point(115.66287,34.449425);
+//var BJ_POINT=new BMap.Point(116.402724,39.916881);
+//var pointArray=[JN_POINT,SQ_POINT,BJ_POINT];
+// var friendmap = {};
+//  friendmap['beijing'] = {
+//	center: new BMap.Point(116.402724,39.916881)
+//  };
+//  friendmap['jining']= {
+//	center: new  BMap.Point(116.609082,35.42297)
+//  };
+//  friendmap['shangqiu'] = {
+//	center: new BMap.Point(115.66287,34.449425)
+//  }
+
+//setTimeout(function() {
+//	 for (var friend in friendmap)
+//	{
+//		var marker = new BMap.Marker(friendmap[friend].center);
+//		map.addOverlay(marker);
+//		marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+//	}
+//	map.setViewport(pointArray);
+//	
+//	}, 2000);
+var MUSIC;
+function initMap() {
+	var map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
+	map.setCurrentCity("北京");   
+	map.enableScrollWheelZoom();
+	// 创建控件
+	//var SDO = new SDOControl();
+	// 添加到地图当中
+	//map.addControl(SDO);
+    map.disableDragging();
+    map.disableDoubleClickZoom();
+    init();
+}
+
+function init() {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('theEnd').style.height = '0';
+    document.getElementById('theEnd').innerHTML = '';
+   // map.setMapType(BMAP_NORMAL_MAP);
+  //  var point = new BMap.Point(MP_CEN.lng, MP_CEN.lat);
+   // map.centerAndZoom(point, 4);
+    map.clearOverlays();
+    map.reset();
+    MUSIC.play();
+   // map.panTo(new BMap.Point(GZ_GTC.lng, GZ_GTC.lat));
+   // panZoom_GTC();
+}
+ 
+function loadScript() {
+  var script = document.createElement("script");
+  script.src = "http://api.map.baidu.com/api?v=1.2&callback=initMap";
+  document.body.appendChild(script);
+  
+}
+//window.onload = function() {
+    var imglist = [
+    ];
+
+    soundManager.setup({
+          url: '../swf/',
+		ontimeout: function(){alert('aa');},
+		 onready: initMP3
+    });
+
+    function initMP3() {
+        MUSIC = soundManager.createSound({
+            id: 'mp3',
+          //  url: 'music/Style.mp3',
+		   url: 'http://liumeijun.sinaapp.com/LemonTree.mp3',
+            onload: function() {
+                //preLoadImages(imglist, function() {
+                    setTimeout(function() {
+                        var loading = document.getElementById('loading');
+                        loading.style.cursor = 'pointer';
+                        loading.innerHTML = '点击开始';
+                        loading.onclick = function() {
+                            screenfull && screenfull.request();
+                            loadScript();
+                        }
+                    }, 3000);
+               // });
+            }
+        });
+        MUSIC.load();
+    }
+//};
+</script>

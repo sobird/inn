@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+#l-map{height:100%;width:78%;float:left;border-right:2px solid #bcbcbc;}
+#r-result{height:100%;width:20%;float:left;}
+#loading {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 999;
+    background: url("images/loading.jpg") no-repeat center center #FFFAD1;
+    top: 0;
+    left: 0;
+    text-align: center;
+    line-height: 300px;
+    font-size: 32px;
+    color: #666;
+}
+</style>
+<div id="loading">正在加载...</div>
+<div id="theEnd"></div>
+<!--<script type="text/javascript" src="customControl.js"></script>-->
+<script type="text/javascript" src="http://liumeijun.com/sm/soundmanager2-nodebug-jsmin.js"></script>
+<script type="text/javascript">
+(function(a,b){"use strict";var c=function(){var a=[["requestFullscreen","exitFullscreen","fullscreenchange","fullscreen","fullscreenElement"],["webkitRequestFullScreen","webkitCancelFullScreen","webkitfullscreenchange","webkitIsFullScreen","webkitCurrentFullScreenElement"],["mozRequestFullScreen","mozCancelFullScreen","mozfullscreenchange","mozFullScreen","mozFullScreenElement"]];for(var c=0,d=a.length;c<d;c++){var e=a[c];if(e[1]in b)return e}}();if(!c)return a.screenfull=!1;var d="ALLOW_KEYBOARD_INPUT"in Element,e={init:function(){return b.addEventListener(c[2],function(a){e.isFullscreen=b[c[3]],e.element=b[c[4]],e.onchange(a)}),this},isFullscreen:b[c[3]],element:b[c[4]],request:function(a){a=a||b.documentElement,a[c[0]](d&&Element.ALLOW_KEYBOARD_INPUT),b.isFullscreen||a[c[0]]()},exit:function(){b[c[1]]()},toggle:function(a){this.isFullscreen?this.exit():this.request(a)},onchange:function(){}};a.screenfull=e.init()})(window,document)
+</script>
+<title>地图类型控件</title>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+
+// 济宁市坐标：116.609082,35.42297
+// 商丘坐标：115.66287,34.449425
+//北京市坐标：
+//焦作周边：
+
+var MUSIC;
+var map;
+var JZ_POINT,BJ_POINT;
+function initMap() {
+	map = new BMap.Map("allmap");
+	map.centerAndZoom(new BMap.Point(116.404, 39.915), 7);
+	//map.setCurrentCity("北京");   
+	map.enableScrollWheelZoom();
+	// 创建控件
+	//var SDO = new SDOControl();
+	// 添加到地图当中
+	//map.addControl(SDO);
+   // map.disableDragging();
+   MUSIC.play();
+    map.disableDoubleClickZoom();
+    init();
+}
+var pointArray;
+var friendmap;
+function init() {
+   document.getElementById('loading').style.display = 'none';
+   //document.getElementById('loading').inner='youare';
+    document.getElementById('theEnd').style.height = '0';
+    document.getElementById('theEnd').innerHTML = '';
+//	var JN_POINT=new BMap.Point(116.609082,35.42297);
+	 JZ_POINT=new BMap.Point(113.231124,35.182277);
+	 BJ_POINT=new BMap.Point(116.402724,39.916881);
+	 LY_POINT=new BMap.Point(118.558581,35.477319);
+	var pointArray=[BJ_POINT,JZ_POINT,LY_POINT];
+	friendmap = {};
+	friendmap['beijing'] = {
+	center: BJ_POINT,
+	alia:'北京市'
+	};
+	friendmap['jiaozuo']= {
+	center: JZ_POINT,
+	alia:'焦作市',
+	boundery:[new BMap.Point(113.229531,35.183931),new BMap.Point(113.229854,35.182117),new BMap.Point(113.23298,35.182308),new BMap.Point(113.232567,35.184329)]
+	};
+	friendmap['yinan']= {
+	center: LY_POINT,
+	alia:'临沂市',
+	boundery:[new BMap.Point(118.552524,35.476895),new BMap.Point(118.557555,35.482656),new BMap.Point(118.572934,35.481157),new BMap.Point(118.571425,35.473338)]
+	};
+//	setTimeout(function() {
+//	 for (var friend in friendmap)
+//	{
+//		var marker = new BMap.Marker(friendmap[friend].center);
+//		map.addOverlay(marker);
+//		marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+//	}
+//	map.setViewport(pointArray);	
+//	}, 1000);
+
+   // map.panTo(new BMap.Point(GZ_GTC.lng, GZ_GTC.lat));
+
+    panZoom_JZ();
+}
+var marker,marker1;
+function panZoom_JZ() {//平移到焦作   第一步
+    
+    setTimeout(function() {
+     map.panTo(JZ_POINT,{noAnimation:false});
+	 zoomTo(18, 800, function() {
+		// map.clearOverlays();   
+            marker = new BMap.Marker(JZ_POINT);
+			marker.enableMassClear=false;
+            map.addOverlay(marker);
+            marker.setAnimation(BMAP_ANIMATION_BOUNCE);		
+            setTimeout(panZoom_LY, 1000);
+        }, JZ_POINT,'焦作市','焦作市山阳区','jiaozuo');
+    }, 800);
+}
+function panZoom_LY()//移动到临沂 第二步
+{
+	
+    setTimeout(function() {
+		   map.setMapType(BMAP_NORMAL_MAP);
+           map.setZoom(7);
+           map.panTo(LY_POINT,{noAnimation:false});
+	 zoomTo(14, 800, function() {
+		// map.clearOverlays();   
+            marker1 = new BMap.Marker(LY_POINT);
+            map.addOverlay(marker1);
+			marker1.enableMassClear=false;
+            marker1.setAnimation(BMAP_ANIMATION_BOUNCE);		
+            setTimeout(panZoom_HNSD, 1000);
+  
+        }, LY_POINT,'临沂市','临沂市沂南县','yinan');
+    }, 800);
+}
+function panZoom_HNSD() {  //建立焦作到临沂路线 第三步
+    zoomTo(9, 1000, function() {
+      //  map.panTo(new BMap.Point(GD_HYS.lng, GD_HYS.lat));
+	  map.setViewport([JZ_POINT,LY_POINT]);
+        setTimeout(function() {
+            var start =JZ_POINT;
+            var end   = LY_POINT;
+            var driving2 = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: false}});
+            driving2.search(start, end);
+            setTimeout(function() {
+                var between = [
+                    {
+                        title: '十年之前你不认识我',
+                        content: '<img src="images/wave.JPG" width="300" height="400" alt="wave" />',
+                        point: JZ_POINT
+                    },
+                    {
+                        title: '十年之前我不认识你',
+                        content: '<img src="images/coral.jpg" width="300" height="400" alt="coral" />',
+                        point: LY_POINT
+                    },
+                    {
+                        title: '而今',
+                        content: '<img src="images/us.jpg" width="300" height="400" alt="love" />',
+                        point: new BMap.Point((JZ_POINT.lng+LY_POINT.lng)/2,(JZ_POINT.lat+LY_POINT.lat)/2) 
+                    }
+                ];
+                loopWin(between, 2000, showPhotos);
+            }, 2000);
+        }, 1000);
+    });
+}
+
+function showPhotos() {
+    map.clearOverlays();
+    map.panTo(BJ_POINT);
+    setTimeout(function() {
+        zoomTo(13, 1000, function() {
+            var photos = [
+                {
+                    title: '2007.11第一次香山邂逅',
+                    content: '<img src="images/xiangshan.jpg" width="335" height="251" alt="香山" />',
+                    point: {lng: 116.204021,lat: 39.996949}
+                },
+                {
+                    title: '2008年这货没少来找我',
+                    content: '<img src="images/08.jpg" width="300" height="400" alt="学校" />',
+                    point: {lng: 116.348924, lat: 39.941032}
+                },
+                {
+                    title: '2009年第一次见他家人',
+                    content: '<img src="images/09.jpg" width="335" height="224" alt="胖子呀" />',
+                    point: {lng: 116.394624, lat: 39.98701}
+                },
+                {
+                    title: '2010年跟我回山东',
+                    content: '<img src="images/10.jpg" width="335" height="251" alt="山东" />',
+                    point: LY_POINT
+                },
+                {
+                    title: '2011年去他家',
+                    content: '<img src=images/11.jpg" width="300" height="383" alt="河南啊" />',
+                    point: {lng:113.267007, lat: 35.171287}
+                },
+                {
+                    title: '2012年又给我回山东了，哈哈~',
+                    content: '<img src="images/13.jpg" width="500" height="375" alt="山东" />',
+                    point: LY_POINT
+                },
+                {
+                    title: '2013年在一起',
+                    content: '<img src="images/13.jpg" width="360" height="480" alt="小区" />',
+                    point: {lng:  116.394624, lat: 39.98701}
+                }
+
+    
+            ];
+            loopWin(photos, 2500, wannaTo);
+        });
+    }, 1000);
+}
+function wannaTo()
+{
+}
+function loopWin(loopList, time, callback) {
+    var i    = 0;
+    var len  = loopList.length;
+    var callback = callback || function () {};
+    var timeout = '';
+
+    function loopWinInner() {
+        if( i == len ) {
+            clearTimeout(timeout);
+            setTimeout(callback, 1000);
+            return false;
+        }
+
+        var opts = {
+            title: loopList[i].title,
+            maxWidth: 600,
+            height: 0
+        }
+        var infoWindow = new BMap.InfoWindow(loopList[i].content, opts);
+        map.openInfoWindow(infoWindow, new BMap.Point(loopList[i].point.lng, loopList[i].point.lat));
+        infoWindow.redraw();
+		var poi=new BMap.Marker(new BMap.Point(loopList[i].point.lng, loopList[i].point.lat));
+		poi.setAnimation(BMAP_ANIMATION_BOUNCE);	
+		map.addOverlay(poi);
+        i++;
+        if( loopList[i] ) {
+            var time = loopList[i].timeout || 2000;
+        } else {
+            var time = 2000;
+        }
+        timeout = setTimeout(loopWinInner, time);
+    }
+
+    loopWinInner();
+}
+/*
+   获取行政边界
+*/
+function getBoundery(city)
+{
+	if(city!='')//加载行政区
+	{
+       var bdary = new BMap.Boundary();
+	   bdary.get(city, function(rs){       //获取行政区域
+        map.clearOverlays();        //清除地图覆盖物       
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        for(var i = 0; i < count; i++){
+            var ply = new BMap.Polygon(rs.boundaries[i], {strokeWeight: 2, strokeColor: "#0000ff",fillColor:'',strokeStyle:'dashed'}); //建立多边形覆盖物         
+			 map.addOverlay(ply);  //添加覆盖物
+	    }
+	})
+	}
+}
+function zoomTo(zoom, time, callback, point,city,district,country) {// 目标级别，延迟时间，回调函数，当前中心点坐标，城市边界
+    var time     = time || 1000;
+    var callback = callback || function() {};
+    var loop     = '';
+
+    function loopZoom() {
+        var curZoom  = map.getZoom();
+        if( curZoom == zoom ) {
+            clearTimeout(loop);
+            callback();
+            return false;
+        }
+		if (curZoom<=10)
+		{
+			getBoundery(city);
+		}
+		else if (curZoom<15)
+		{
+		getBoundery(district);
+		}
+		if(curZoom>=15)
+		{
+            map.clearOverlays(); 
+		    map.setMapType(BMAP_HYBRID_MAP);
+			var polygon=new BMap.Polygon(friendmap[country].boundery);
+			map.addOverlay(polygon);
+		}
+        var plus    = curZoom > zoom ? -1 : 1;
+        var toZoom  = curZoom + plus;
+		map.setZoom(toZoom);
+        if( point ) {
+            map.setCenter(point);
+        }
+        var center = map.getCenter();
+        loop = setTimeout(loopZoom, time);
+    }
+    loopZoom();
+}
+
+function loadScript() {
+  var script = document.createElement("script");
+  script.src = "http://api.map.baidu.com/api?v=1.4&callback=initMap";
+  document.body.appendChild(script);
+  
+}
+window.onload = function() {
+//    var imglist = [
+//    ];
+
+    soundManager.setup({
+        url:'test/swf/',
+        onready: initMP3,
+		ontimeout:function(){alert('aa');}
+    });
+
+    function initMP3() {
+   //alert('load');
+        MUSIC = soundManager.createSound({
+            id: 'aSound',
+            url: 'music/Style.mp3',
+            onload: function() {
+			//alert('dd');
+               // preLoadImages(imglist, function() {
+                    setTimeout(function() {
+                        var loading = document.getElementById('loading');
+                        loading.style.cursor = 'pointer';
+                        loading.innerHTML = '点击开始';
+                        loading.onclick = function() {
+                            screenfull && screenfull.request();
+                            loadScript();
+                        }
+                    }, 3000);
+                //});
+            }
+        });
+        MUSIC.load();
+    }
+};
+// loadScript();
+</script>
