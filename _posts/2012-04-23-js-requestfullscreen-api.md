@@ -31,6 +31,10 @@ date: 2012-04-23 +0800
     </div>
 </div>
 
+<p></p>
+
+<a href="https://sobird.me/js-requestfullscreen-api.htm"><< 回到相关文章</a>
+
 <script type="text/javascript">
 /* 
 Native FullScreen JavaScript API
