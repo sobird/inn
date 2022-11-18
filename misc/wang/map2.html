@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+    <title>地图接口</title>
+</head>
+<style type="text/css">
+	#mapDiv1 { height:400px; width:600px; }
+	#mapDiv2 { height:400px; width:600px; left:620px; top:-420px;}
+</style>
+<body>
+    <div id="mapDiv1" ></div>
+   <br />
+    <div id="mapDiv2" ></div>
+</body>
+</html>
+<script type="text/javascript">
+    //地图初始化 
+    var map1 = new BMap.Map("mapDiv1");
+    map1.centerAndZoom(new BMap.Point(116.401394,39.915156),12);
+    map1.enableScrollWheelZoom();
+
+
+    var map2 = new BMap.Map("mapDiv2",{mapType: BMAP_HYBRID_MAP});   //设置卫星图为底图
+    map2.centerAndZoom(new BMap.Point(116.401394,39.915156),12);
+    map2.enableScrollWheelZoom();
+
+  
+	map1.addEventListener("zoomend", function () {
+	map2.zoomTo(map1.getZoom());
+	map2.panTo(map1.getCenter());
+	});
+
+	map1.addEventListener("moveend", function () {
+	map2.zoomTo(map1.getZoom());
+	map2.panTo(map1.getCenter());
+	});
+
+</script>
