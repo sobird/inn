@@ -1,0 +1,207 @@
+/**
+ * 一个通用的CSS文档
+ * 
+ * @author	junlong.yang at 2011/11/02 build.
+ * @version	$Id: layout.css 35 2013-01-21 05:37:52Z yangjunlong $
+ */
+
+html{
+	background-color:#fff;
+	height:100%;
+}
+body,div,h1,h2,h3,h4,ul,li,form,input,dl,dt,dd,p{
+	margin:0;
+	padding:0;
+}
+img{
+	border:none;
+}
+ul,ol,li{
+	list-style:none;
+}
+
+ /*清除浮动*/
+.clearfix:after {
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    clear: both;
+}
+
+/* no ie mac \*/
+* html .clearfix {
+    height: 1%;
+}
+/* end */
+* + html .clearfix {
+    height: 1%;
+} 
+
+body{
+	font-size: 12px;
+	font-family:'宋体';
+	min-height: 100%;
+	position:relative;
+} 
+
+.frame{
+	z-index:10;
+	position:relative;
+}
+
+
+
+.skin-head,.skin-hd-tr-bg,.skin-side{
+	position:absolute;
+}
+
+.skin-head{
+	height:72px;
+	background-image: url("../img/bgx.png");
+    background-repeat: repeat-x;
+	width: 100%;
+	z-index:8;
+	top:0px;
+}
+.skin-hd-tr-bg{
+	top:0;
+	right:0;
+	height:72px;
+	background-image: url("../img/top_right.jpg");
+    background-repeat: no-repeat;
+	width: 400px;
+	background-position: 100% 0;
+	z-index:9;
+}
+.skin-side{
+	background: none repeat scroll 0 0 #E9F1F5;
+    border-right:1px solid #8BAABF;
+	width: 190px;
+	top:0;
+	bottom:0;
+}
+
+
+.mcms-head{
+	height:72px;
+}
+
+/* mp-tabs :begin */
+.mp-tp-tab{
+	left: 190px;
+    position: absolute;
+    top: 45px;
+    display:none;
+}
+.mp-tabs-rc{
+	background-image: url("../img/bg.png");
+    background-repeat: no-repeat;
+	height:23px;
+	position: absolute;
+    top: 0;
+    vertical-align: baseline;
+    width: 5px;
+}
+.mp-tabs-rc-l{
+	background-position: -416px 0;
+	left:0;
+}
+.mp-tabs-rc-r{
+	background-position: -421px 0;
+    right: 0;
+}
+.mp-tabs-item-on .mp-tabs-rc-l{
+	background-position: -448px 0;
+}
+
+.mp-tabs-item-on .mp-tabs-rc-r{
+	background-position: -453px 0;
+}
+.mp-tabs-item{
+	background-image: url("../img/bgx.png");
+    background-repeat: repeat-x;
+	background-position: 0 -720px;
+	cursor: pointer;
+    float: left;
+    height: 20px;
+    line-height: 22px;
+    margin-top: 1px;
+    padding: 0 15px 0 10px;
+    position: relative;
+    z-index: 2;
+}
+.mp-tabs-item-on{
+	background-position: 0 -756px;
+	font-weight: bold;
+    height: 23px;
+    line-height: 24px;
+    margin-top: 0;
+}
+.mp-tabs-link{
+	color:#7392A8;
+	outline: 0 none;
+    overflow: hidden;
+    text-decoration: none;
+    white-space: nowrap;
+    width: 100%;
+}
+.mp-tabs-item-on .mp-tabs-link{
+	color:#fff;
+}
+.mp-tabs-close{
+	background-image: url("../img/bg.png");
+	background-repeat: no-repeat;
+	background-position: -477px -29px;
+    top:4px;
+	height: 13px;
+    position: absolute;
+    right: 5px;
+    width: 13px;
+}
+.mp-tabs-item-on .mp-tabs-close{
+	background-position: -446px -30px;
+	top: 5px;
+}
+.mp-tabs-item-on .mp-tabs-close:hover,.mp-tabs-close:hover{
+	background-position: -512px -32px;
+}
+/* mp-tabs :end */
+.mcms-side{
+
+    margin-right: -191px;
+    width: 191px;
+}
+.lB{
+	margin:10px 0 5px;
+}
+.lB li a{
+	display: block;
+    height: 26px;
+    line-height: 26px;
+    overflow: hidden;
+    padding: 0 5px 0 20px;
+    position: relative;
+    text-decoration: none;
+	color: #005590;
+	outline:0 none;
+}
+.lB li a:hover{
+	background-color:#dbe8f2;
+	width:165px;
+}
+.lB li.on a{
+	background:#fff;
+	border-bottom:1px solid #8BAABF;
+	border-top:1px solid #8BAABF;
+}
+.lB li.on a:hover{
+	width:166px;
+}
+.split-line{
+	border-top:1px solid #9CB8CC;
+	border-bottom:1px solid #fff;
+	height:0;
+	margin:0 5px;
+}

@@ -1,0 +1,212 @@
+<!--
+/**
+ * index视图文件
+ * 
+ * @license 	General Public License
+ * @author		junlong.yang at 2011-10-12 下午05:09:10 build.
+ * @link		http://mvc.crossyou.cn/
+ * @version		$Id: index.html 35 2013-01-21 05:37:52Z yangjunlong $
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>163Mail_UI_Design</title>
+
+<link href="css/layout.css" rel="stylesheet" type="text/css" />
+<script src="edo.src.js" type="text/javascript"></script>
+<script src="edo.ext.js" type="text/javascript"></script>
+
+<style type="text/css">
+.e-tabbar .e-btn {
+    background-image: url("img/bgx.png");
+    background-position: 0 -720px;
+    background-repeat: repeat-x;
+    cursor: pointer;
+    float: left;
+    height: 20px;
+    line-height: 22px;
+    margin-top: 1px;
+    padding: 0 15px 0 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.e-btn-close-left .e-btn-arrow, .e-btn-close-right .e-btn-arrow {
+	background-image: url("img/bg.png");
+    background-position: -477px -29px;
+    background-repeat: no-repeat;
+    height: 13px;
+    position: absolute;
+    right: 5px;
+    top: 4px;
+    width: 13px;
+}
+.e-tabbar .e-tabbar-selected .e-btn-arrow{
+	background-position: -446px -30px;
+    top: 5px;
+}
+.e-btn-close-left .e-btn-arrow:hover, .e-btn-close-right .e-btn-arrow:hover {
+	background-position: -512px -32px;
+}
+
+.e-tabbar .e-btn{
+	color: #7392A8;
+    outline: 0 none;
+    overflow: hidden;
+    text-decoration: none;
+    white-space: nowrap;
+    width: 100%;
+}
+.e-tabbar .e-tabbar-selected{
+	background-position: 0 -756px;
+    font-weight: bold;
+    height: 23px;
+    line-height: 24px;
+    margin-top: 0;	
+}
+.e-tabbar-selected .e-btn-text {
+	color:#fff;
+}
+
+.e-tabbar-selected .mp-tabs-rc-l{
+	background-position: -448px 0;
+}
+
+.e-tabbar-selected .mp-tabs-rc-r{
+	background-position: -453px 0;
+}
+
+.e-nav-start {
+	display: block;
+    padding: 0 4px;
+    text-align: center;
+	white-space: nowrap;
+    background-image: url("img/west.gif");
+}
+.e-nav-end {
+	display: block;
+    padding: 0 4px;
+    text-align: center;
+	white-space: nowrap;
+    background-image: url("img/east.gif");
+}
+.e-btn-icon .e-btn-text {
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.e-tabbar .e-btn-icon{
+	top:0;
+}
+.e-tree-nodetext {
+    cursor: default;
+    line-height: 25px;
+    position: absolute;
+    top: 0;
+    white-space: nowrap;
+}
+.e-tree-treecolumn .e-table-cell-inner {
+    padding: 0;
+    position: relative;
+}
+/**/
+.e-table {
+    color: #005590;
+}
+
+.e-tree-nodeicon {
+    background-image: url("img/bg.png");
+    background-position: -16px 0;
+	background-position: -224px -32px;
+    height: 11px;
+    width: 11px;
+	cursor: pointer;
+	outline: medium none;
+    position: absolute;
+	top:5px;
+}
+.e-tree-expanded .e-tree-nodeicon {
+	background-position: -224px -32px;
+}
+.e-tree-collapse .e-tree-nodeicon {
+	background-position: -256px -32px;
+}
+
+.e-table-row{
+	
+}
+.e-table-row .e-table-cell-inner{
+	border-bottom: 1px solid #E9F1F5;
+    border-top: 1px solid #E9F1F5;
+	width:190px;
+}
+.e-table-table .e-table-row-selected .e-table-cell-inner{
+	background:#fff;
+	border-bottom: 1px solid #8BAABF;
+    border-top: 1px solid #8BAABF;
+	width:191px;
+}
+.e-table-row-over .e-table-cell-inner{
+	background:#dbe8f2;
+	width:190px;
+}
+.e-tree-folder{
+	display:none;
+}
+</style>
+</head>
+<body>
+
+<div id="mcms" class="frame">
+	<div class="mcms-head">
+		<div id="mp_tab_top" class="mp-tp-tab">
+			<ul>
+				<li class="mp-tabs-item">
+					<a class="mp-tabs-link" href="#">
+						<b class="mp-tabs-rc mp-tabs-rc-l"></b>
+						<b class="mp-tabs-rc mp-tabs-rc-r"></b>
+						<span class="text">系统主页</span>
+					</a>
+				</li>
+				
+				<li class="mp-tabs-item mp-tabs-item-on" style="width:100px">
+					<a class="mp-tabs-link" href="#">
+						<b class="mp-tabs-rc mp-tabs-rc-l"></b>
+						<b class="mp-tabs-rc mp-tabs-rc-r"></b>
+						<span class="text">已发布的地图</span>
+					</a>
+					<a hidefocus="hidefocus" class="mp-tabs-close" href="javascript:void(0)" title="关闭"></a>
+				</li>
+				
+				<li class="mp-tabs-item" style="width:100px">
+					<a class="mp-tabs-link" href="#">
+						<b class="mp-tabs-rc mp-tabs-rc-l"></b>
+						<b class="mp-tabs-rc mp-tabs-rc-r"></b>
+						<span class="text">未发布的地图</span>
+					</a>
+					<a hidefocus="hidefocus" class="mp-tabs-close" href="javascript:void(0)" title="关闭"></a>
+				</li>
+			</ul>
+		</div><!-- #mp_tab_top : end -->
+	</div><!-- .mcms-head : end -->
+	
+	<div class="mcms-side" id="jl_sidebar">
+		
+	</div><!-- .mcms-side : end -->
+	<div class="mcms-main"></div><!-- .mcms-main : end -->
+</div>
+
+
+<div id="mp_skin" class="skin">
+	<div class="skin-head"></div>
+	<div class="skin-hd-tr-bg"></div>
+	<div class="skin-side"></div>
+</div>
+<script src="UIComponents.js" type="text/javascript"></script>
+<script src="custom.js" type="text/javascript"></script>
+</body>
+</html>
+
+<?php
+/* End of file: index.php */
+/* Location: ./module/home/view/index.php */
