@@ -12,7 +12,7 @@ date: 2011-03-24 +0800
     <input type="text" name="lng" placeholder="经度" v-model="lng" />
     <input type="text" name="lat" placeholder="维度" v-model="lat" />
     <p>
-      {{coordOffsetEncrypt}}
+      {% raw %}{{coordOffsetEncrypt}}{% endraw %}
     </p>
   </div>
 
@@ -21,11 +21,9 @@ date: 2011-03-24 +0800
     <input type="text" name="lng" placeholder="经度" v-model="delng" />
     <input type="text" name="lat" placeholder="维度" v-model="delat" />
     <p>
-      {{croodOffsetDecrypt}}
+      {% raw %}{{croodOffsetDecrypt}}{% endraw %}
     </p>
   </div>
-
-  
 </div>
 
 <a href="https://sobird.me/mapbar-longitude-latitude-encode-decode.htm">返回相关文章</a>
@@ -44,8 +42,6 @@ date: 2011-03-24 +0800
         var result = coordOffsetEncrypt(this.lng, this.lat);
         this.delng = result[0];
         this.delat = result[1];
-
-        console.log(1212)
         return result;
       },
       croodOffsetDecrypt: function () {
