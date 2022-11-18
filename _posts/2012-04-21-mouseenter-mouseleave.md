@@ -2,6 +2,8 @@
 layout: post
 title: mouseenter和mouseleave事件演示
 date: 2012-04-21 +0800
+
+CustomVariables: 这是自定义变量，可通过{{page.CustomVariables}}来调佣。
 ---
 
 <script type="text/javascript" src="https://www.unpkg.com/jquery@3.6.1/dist/jquery.js"></script>
