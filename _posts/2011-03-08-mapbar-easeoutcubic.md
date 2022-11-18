@@ -16,6 +16,8 @@ img {
 
 <div id="mapbar" style="width:500px;height:300px"></div>
 
+<a href="https://sobird.me/mapbar-easeoutcubic.htm">返回相关文章</a>
+
 <script type="text/javascript">
     var maplet = null;
     function initMap(){

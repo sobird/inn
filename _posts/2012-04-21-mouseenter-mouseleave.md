@@ -158,6 +158,8 @@ $('#mo_3').mouseover(function(e){
 });
 ```
 
+<a href="https://sobird.me/mouseenter-mouseleave.htm">返回相关文章</a>
+
 <script type="text/javascript">
 var _elemt = null;
 var _numbe = 0;

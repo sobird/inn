@@ -1,5 +1,5 @@
 ---
-layout: broad
+layout: page
 title: 鼠标拖拽缓动效果演示
 date: 2011-02-10 +0800
 ---
@@ -13,12 +13,15 @@ date: 2011-02-10 +0800
   height:100px;
   background:#E9F3FD;
   padding:5px;
+  left: 50%
 }
 </style>
 
 <div id="dragme">
   一个大大的框  
 </div>
+
+<a href="https://sobird.me/javascript-easeoutcubic-app-example.htm">返回相关文章</a>
 
 <script type="text/javascript">
 function $(id){
