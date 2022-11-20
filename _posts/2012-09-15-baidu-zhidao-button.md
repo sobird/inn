@@ -35,7 +35,7 @@ a.operation:hover, button.operation:hover{
     padding:0;
     height:23px;
     font:normal 12px/23px '宋体' ;
-    background:url(http://img.baidu.com/img/iknow/ui/btns/global.png) no-repeat -159px -263px;
+    background:url(/assets/img/bg.png) repeat;
     text-align:center;
     color:#589b00;
     text-decoration:none;
@@ -67,4 +67,4 @@ a.operation:hover, button.operation:hover{
 
 <h4>新的Button实现方式</h4>
 <p>可以自适应汉字长度</p>
-<p><div class="new-btn"><span class="left-btn"></span><a href="javascript:void(0)">我是按钮哈哈</a><span class="right-btn"></span></div></p>
+<p><div class="new-btn"><span class="left-btn"></span><a href="javascript:void(0)">我是按钮，这个按钮有点长！</a><span class="right-btn"></span></div></p>
