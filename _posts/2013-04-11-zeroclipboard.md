@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 浏览器复制插件
+title: 浏览器复制插件-ZeroClipboard
 date: 2013-04-11 12:12:57 +0800
 ---
 
