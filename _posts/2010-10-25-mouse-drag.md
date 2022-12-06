@@ -33,9 +33,9 @@ date: 2010-10-25 14:38:00 +0800
 
     t = this;
     // 注册mousemove事件到document对象
-    document.onmousemove   = mousedrag.dragIt;
+    document.onmousemove = mousedrag.dragIt;
     // 注册mouseup事件到document对象
-    document.onmouseup    = mousedrag.endIt;  
+    document.onmouseup = mousedrag.endIt;  
 
     page = {
       x:0,
@@ -52,11 +52,11 @@ date: 2010-10-25 14:38:00 +0800
   },
 
   dragIt: function(e){
-    var left = e.pageX-page.x+offset.left;
-    var stop = e.pageY-page.y+offset.top;
+    var left = e.pageX-page.x + offset.left;
+    var stop = e.pageY-page.y + offset.top;
     
-    t.style.left=left+"px";
-    t.style.top=stop+"px";
+    t.style.left = left + "px";
+    t.style.top = stop + "px";
   },
 
   endIt: function(e){
@@ -66,9 +66,9 @@ date: 2010-10-25 14:38:00 +0800
 
   setEv: function(e){
     var e = e || window.event;
-    if(typeof e.pageX=='undefined'){
-      e.pageX = e.clientX+document.documentElement.scrollLeft;
-      e.pageY = e.clientY+document.documentElement.scrollTop;
+    if(typeof e.pageX == 'undefined'){
+      e.pageX = e.clientX + document.documentElement.scrollLeft;
+      e.pageY = e.clientY + document.documentElement.scrollTop;
     }
     return e;
   }
