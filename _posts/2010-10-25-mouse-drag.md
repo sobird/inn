@@ -3,6 +3,7 @@ layout: post
 title: 原生JS实现鼠标拖拽
 date: 2010-10-25 14:38:00 +0800
 ---
+
 <style type="text/css">
 #dragme {
   z-index: 20;
