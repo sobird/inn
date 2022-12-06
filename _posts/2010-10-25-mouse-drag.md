@@ -22,13 +22,15 @@ date: 2010-10-25 14:38:00 +0800
 
 <script type="text/javascript">
   mousedrag = {
-  'drags': [],
-  'init': function(id){
+  init: function(id){
     var o = document.getElementById(id);
     o.onmousedown = mousedrag.starIt;
   },
 
-  'starIt': function(e){
+  starIt: function(e){
+    //重置Event对象
+    e = mousedrag.setEv(e);
+
     t = this;
     // 注册mousemove事件到document对象
     document.onmousemove   = mousedrag.dragIt;
@@ -49,7 +51,7 @@ date: 2010-10-25 14:38:00 +0800
     page.y = e.pageY;
   },
 
-  'dragIt': function(e){
+  dragIt: function(e){
     var left = e.pageX-page.x+offset.left;
     var stop = e.pageY-page.y+offset.top;
     
@@ -57,9 +59,18 @@ date: 2010-10-25 14:38:00 +0800
     t.style.top=stop+"px";
   },
 
-  'endIt' : function(e){
+  endIt: function(e){
     document.onmousemove = null;
     document.onmouseup = null;
+  },
+
+  setEv: function(e){
+    var e = e || window.event;
+    if(typeof e.pageX=='undefined'){
+      e.pageX = e.clientX+document.documentElement.scrollLeft;
+      e.pageY = e.clientY+document.documentElement.scrollTop;
+    }
+    return e;
   }
 };
 
