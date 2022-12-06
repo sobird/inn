@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 实现一个简单的MapBar切片渲染
+title: MapBar地图切片渲染
 date: 2011-03-29 01:46:00 +0800
 ---
 
@@ -8,7 +8,7 @@ date: 2011-03-29 01:46:00 +0800
 
 <div id="map" style="position:relative;width:740px;height:350px;overflow:hidden;"></div>
 
-<div id="panel">
+<p id="panel">
   <p>宽度：<input type="text" id="width" name="customsize" size="7" ></p>
   <p>高度：<input type="text" id="height" name="customsize" size="7" ></p>
   <p>经度：<input type="text" id="lon" name="customsize" size="7" ></p>
@@ -18,7 +18,9 @@ date: 2011-03-29 01:46:00 +0800
   <p>注意本地图是个最简单的Mapbar地图,您就别想拖动缩放了</p>
   <p style="color:#f00">如果你想看清楚地图是怎么形成的，请在下面的表单中填写一个时间差(以毫秒为单位)</p>
   <p>时间差：<input type="text" disabled="true" id="interval" name="customsize" size="6" >(不太好使)</p>
-</div>
+</p>
+
+<a href="https://sobird.me/a-simple-map-of-the-source-code-mapbar.htm">返回相关文章</a>
 
 <script type="text/javascript">
 var divId = 'map';
