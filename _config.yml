@@ -21,7 +21,7 @@
 title: 小酒馆
 email: i@sobird.me
 description: >- # this means to ignore newlines until "baseurl:"
-  sobird
+  Sobird的小酒馆,工作之余不妨来小酒馆里喝一杯
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: sobird
