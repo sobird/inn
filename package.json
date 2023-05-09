@@ -1,0 +1,24 @@
+{
+  "name": "inn",
+  "version": "0.1.0",
+  "description": "小酒馆",
+  "main": "index.js",
+  "scripts": {
+    "start": "jekyll serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sobird/inn.git"
+  },
+  "keywords": [
+    "sobird",
+    "inn"
+  ],
+  "author": "sobird",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sobird/inn/issues"
+  },
+  "homepage": "https://github.com/sobird/inn#readme"
+}
