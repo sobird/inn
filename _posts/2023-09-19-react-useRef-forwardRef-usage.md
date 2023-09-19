@@ -6,11 +6,13 @@ date: 2023-09-20 00:00 +0800
 
 <script crossorigin src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
 <script crossorigin src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/prismjs@1.29.0/prism.js" data-manual></script>
+<link rel="stylesheet" href="https://unpkg.com/prismjs@1.29.0/themes/prism.min.css">
 
 <div id="root"></div>
 
-<script type="text/babel">
+<script type="text/babel" id="script">
   // 子组件
   class ChildClass extends React.Component {
     constructor() {
@@ -117,3 +119,25 @@ date: 2023-09-20 00:00 +0800
 </script>
 
 
+## 已下为源代码
+
+<pre>
+  <code class="language-js" id="prism"></code>
+</pre>
+
+<script>
+    function cloneNode(node) {
+        var newNode = node.cloneNode(false); // 参数为 'false' 表示不会复制node的子节点
+        // 对于node的所有子节点，我们要分别复制并添加到新的节点中
+        for (var i = 0; i < node.childNodes.length; i++) {
+            newNode.appendChild(cloneNode(node.childNodes[i]));
+        }
+        return newNode;
+    }
+
+    const script = document.querySelector("#script");
+    const prism = document.querySelector("#prism");
+    prism.appendChild(cloneNode(script.childNodes[0]));
+
+    Prism.highlightAll();
+</script>
