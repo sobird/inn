@@ -11,6 +11,38 @@ date: 2023-09-20 00:00 +0800
 <div id="root"></div>
 
 <script type="text/babel">
+  // 子组件
+  class ChildClass extends React.Component {
+    constructor() {
+      super()
+    }
+
+    render() {
+      return (
+        <div className="child">
+          <h2>类子组件</h2>
+        </div>
+      )
+    }
+  }
+
+  const ChildFunction = () => {
+    const inputRef = React.useRef();
+    // const inputRef = React.createRef(); // 也可以
+
+    const onClick = () => {
+      inputRef.current.focus();
+    }
+
+    return (
+      <div className="child">
+        <h2>函数子组件</h2>
+        <input type="text" ref={inputRef}/>
+        <button onClick={onClick}>聚焦</button>
+      </div>
+    ) 
+  }
+
   class App extends React.Component {
     constructor() {
       super()
@@ -39,6 +71,9 @@ date: 2023-09-20 00:00 +0800
           <button onClick={() => this.setState({count: count + 1})}>自增</button>
           <button onClick={this.onClick1}>聚焦1</button>
           <button onClick={this.onClick2}>聚焦2</button>
+          
+          <ChildClass />
+          <ChildFunction />
         </>
       )
     }
