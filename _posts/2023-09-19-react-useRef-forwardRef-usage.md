@@ -15,18 +15,23 @@ date: 2023-09-20 00:00 +0800
     constructor() {
       super()
       this.state = {
-        num:1
+        count: 1
       }
     }
-    add=()=> {
-      this.setState({
-        num: this.state.num + 1
-      })
+
+    onClick = () => {
+      this.inputRef.focus();
     }
+
     render() {
-      return <button onClick={this.add}  >
-        {this.state.num}
-      </button>
+      const { count } = this.state;
+      return (
+        <>
+          <input type="text" value={count} ref={ ref => { this.inputRef = ref; }}/>
+          <button onClick={() => this.setState({count: count + 1})}>自增</button>
+          <button onClick={this.onClick}>聚焦</button>
+        </>
+      )
     }
   }
 
