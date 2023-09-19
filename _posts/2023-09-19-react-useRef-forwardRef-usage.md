@@ -26,8 +26,9 @@ date: 2023-09-20 00:00 +0800
     }
   }
 
-  const ChildFunction = () => {
-    const inputRef = React.useRef();
+  const ChildFunction = (props, ref) => {
+    
+    const inputRef = ref.current === null ? ref : React.useRef();
     // const inputRef = React.createRef(); // 也可以
 
     const onClick = () => {
@@ -41,7 +42,9 @@ date: 2023-09-20 00:00 +0800
         <button onClick={onClick}>聚焦</button>
       </div>
     ) 
-  }
+  };
+
+  const ChildFunctionForwardRef = React.forwardRef(ChildFunction);
 
   class App extends React.Component {
     constructor() {
@@ -53,6 +56,8 @@ date: 2023-09-20 00:00 +0800
 
     // 方式二
     inputRef2 = React.createRef();
+    childFunctionRef = React.createRef();
+    childFunctionForwardRef = React.createRef();
 
     onClick1 = () => {
       this.inputRef1.focus();
@@ -60,6 +65,16 @@ date: 2023-09-20 00:00 +0800
 
     onClick2 = () => {
       this.inputRef2.current.focus();
+    }
+
+    onClick3 = () => {
+      // 输出为null 函数组件不能绑定ref
+      console.log(this.childFunctionRef)
+    }
+
+    onClick4 = () => {
+      // 通过forwardRef透传子组件的ref
+      this.childFunctionForwardRef.current.focus();
     }
 
     render() {
@@ -73,7 +88,10 @@ date: 2023-09-20 00:00 +0800
           <button onClick={this.onClick2}>聚焦2</button>
           
           <ChildClass />
-          <ChildFunction />
+          <ChildFunction ref={this.childFunctionRef} />
+          <button onClick={this.onClick3}>父按钮1</button>
+          <ChildFunctionForwardRef ref={this.childFunctionForwardRef}/>
+          <button onClick={this.onClick4}>父按钮2</button>
         </>
       )
     }
