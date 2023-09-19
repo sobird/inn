@@ -17,10 +17,18 @@ date: 2023-09-20 00:00 +0800
       super()
     }
 
+    inputRef = React.createRef();
+
+    onClick = () => {
+      this.inputRef.current.focus();
+    }
+
     render() {
       return (
         <div className="child">
           <h2>类子组件</h2>
+          <input type="text" ref={this.inputRef}/>
+          <button onClick={this.onClick}>聚焦</button>
         </div>
       )
     }
@@ -56,6 +64,7 @@ date: 2023-09-20 00:00 +0800
 
     // 方式二
     inputRef2 = React.createRef();
+    childClassRef = React.createRef();
     childFunctionRef = React.createRef();
     childFunctionForwardRef = React.createRef();
 
@@ -77,6 +86,11 @@ date: 2023-09-20 00:00 +0800
       this.childFunctionForwardRef.current.focus();
     }
 
+    onClick5 = () => {
+      // current 为 ChildClass 组件dom
+      console.log(this.childClassRef)
+    }
+
     render() {
       const { count } = this.state;
       return (
@@ -87,7 +101,9 @@ date: 2023-09-20 00:00 +0800
           <button onClick={this.onClick1}>聚焦1</button>
           <button onClick={this.onClick2}>聚焦2</button>
           
-          <ChildClass />
+          <ChildClass ref={this.childClassRef} />
+          <button onClick={this.onClick5}>父按钮1</button>
+
           <ChildFunction ref={this.childFunctionRef} />
           <button onClick={this.onClick3}>父按钮1</button>
           <ChildFunctionForwardRef ref={this.childFunctionForwardRef}/>
