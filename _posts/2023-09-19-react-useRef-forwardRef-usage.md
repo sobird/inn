@@ -19,17 +19,26 @@ date: 2023-09-20 00:00 +0800
       }
     }
 
-    onClick = () => {
-      this.inputRef.focus();
+    // 方式二
+    inputRef2 = React.createRef();
+
+    onClick1 = () => {
+      this.inputRef1.focus();
+    }
+
+    onClick2 = () => {
+      this.inputRef2.current.focus();
     }
 
     render() {
       const { count } = this.state;
       return (
         <>
-          <input type="text" value={count} ref={ ref => { this.inputRef = ref; }}/>
+          <input type="text" value={count} ref={ ref => { this.inputRef1 = ref; }}/>
+          <input type="text" value={count} ref={ this.inputRef2 }/>
           <button onClick={() => this.setState({count: count + 1})}>自增</button>
-          <button onClick={this.onClick}>聚焦</button>
+          <button onClick={this.onClick1}>聚焦1</button>
+          <button onClick={this.onClick2}>聚焦2</button>
         </>
       )
     }
