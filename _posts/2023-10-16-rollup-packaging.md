@@ -28,7 +28,7 @@ export default {
 ```
 
 ### rollup-plugin-typescript2
-> 跟上面插件一样
+> 跟上面插件一样 编译速度慢一些
 ```ts
 import typescript from 'rollup-plugin-typescript2';
 
@@ -40,8 +40,44 @@ export default {
 }
 ```
 
+### rollup-plugin-esbuild
+> 该插件可以用来替换 rollup/plugin-replace, rollup-plugin-typescript2, @rollup/plugin-typescript 和 rollup-plugin-terser 等
+
+```ts
+import esbuild from 'rollup-plugin-esbuild'
+
+export default {
+  plugins: [
+    esbuild({
+      // All options are optional
+      include: /\.[jt]sx?$/, // default, inferred from `loaders` option
+      exclude: /node_modules/, // default
+      sourceMap: true, // default
+      minify: process.env.NODE_ENV === 'production',
+      target: 'es2017', // default, or 'es20XX', 'esnext'
+      jsx: 'transform', // default, or 'preserve'
+      jsxFactory: 'React.createElement',
+      jsxFragment: 'React.Fragment',
+      // Like @rollup/plugin-replace
+      define: {
+        __VERSION__: '"x.y.z"',
+      },
+      tsconfig: 'tsconfig.json', // default
+      // Add extra loaders
+      loaders: {
+        // Add .json files support
+        // require @rollup/plugin-commonjs
+        '.json': 'json',
+        // Enable JSX in .js files too
+        '.js': 'jsx',
+      },
+    }),
+  ],
+}
+```
+
 ### @rollup/plugin-node-resolve
-> 让 rollup 能够处理外部依赖。
+> 让 rollup 能够处理外部依赖。用于使用 node_modules 中的第三方模块
 
 ```ts
 import { nodeResolve } from '@rollup/plugin-node-resolve';
@@ -118,7 +154,7 @@ export default {
 ```
 
 ### @rollup/plugin-commonjs
-> 转换CommonJS模块为 ES6
+> 转换CommonJS模块为 ES6， 让你能在项目里导入 commonjs 格式的文件/模块
 
 ```ts
 import commonjs from '@rollup/plugin-commonjs';
@@ -134,6 +170,7 @@ export default {
 ```
 
 ### @rollup/plugin-babel
+> 通过 Babel 能将你所写的 es6/es7 代码编译转换为 es5 ，以适用那些更古老的浏览器
 
 ```ts
 import { babel } from '@rollup/plugin-babel';
@@ -141,13 +178,37 @@ import { babel } from '@rollup/plugin-babel';
 export default {
   plugins: [babel({
     babelHelpers: 'bundled',
-    presets: ['@babel/preset-env']
+    presets: ['@babel/preset-env'],
+    // 禁止使用本地.babelrc文件配置
+    babelrc: false,
+    // 注意配置 文件后缀，否则该插件匹配不到相应的文件后缀
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.scss'],
   })]
 };
 ```
 
+```ts
+// .babelrc
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ],
+    "@babel/preset-typescript",
+    "@babel/preset-react"
+  ]
+}
+```
+
 ### rollup-plugin-postcss
 >默认集成了对 css、scss、less、stylus 的支持。
+
+需要安装 postcss 以及对应的样式支持(sass, less等)
 
 ```ts
 import postcss from 'rollup-plugin-postcss'
@@ -298,4 +359,48 @@ export default  {
     })
   ]
 }
+```
+
+### @rollup/plugin-replace
+> 替换打包文件中的目标字符串
+
+```ts
+import replace from '@rollup/plugin-replace';
+
+export default {
+  input: 'src/index.js',
+  output: {
+    dir: 'output',
+    format: 'cjs'
+  },
+  plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+      __buildDate__: () => JSON.stringify(new Date()),
+      __buildVersion: 15
+    })
+  ]
+};
+```
+
+### @rollup/plugin-alias
+> 可以让你在开始时使用别名来导入文件
+
+```ts
+import alias from '@rollup/plugin-alias';
+
+export default {
+  input: 'src/index.js',
+  output: {
+    dir: 'output',
+    format: 'cjs'
+  },
+  plugins: [
+    alias({
+      entries: [
+        { find: '@', replacement: './src' },
+      ]
+    })
+  ]
+};
 ```
