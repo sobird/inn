@@ -29,19 +29,25 @@ export default {
 
 ### rollup-plugin-typescript2
 > 跟上面插件一样 编译速度慢一些
+
 ```ts
 import typescript from 'rollup-plugin-typescript2';
 
 export default {
-
   plugins: [
     typescript(/*{ plugin options }*/)
   ]
 }
 ```
 
-### rollup-plugin-esbuild
-> 该插件可以用来替换 rollup/plugin-replace, rollup-plugin-typescript2, @rollup/plugin-typescript 和 rollup-plugin-terser 等
+### rollup-plugin-esbuild (推荐)
+> 该插件可以用来替换 rollup-plugin-typescript2, @rollup/plugin-typescript 和 rollup-plugin-terser 
+
+**注** 该插件不支持路径别名，需要 [@rollup/plugin-alias](https://github.com/egoist/rollup-plugin-esbuild/issues/70) 插件支持
+
+```sh
+yarn add esbuild rollup-plugin-esbuild --dev
+```
 
 ```ts
 import esbuild from 'rollup-plugin-esbuild'
