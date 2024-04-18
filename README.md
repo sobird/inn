@@ -1,7 +1,7 @@
 # 小酒馆 🍷
 > 工作之余不妨来小酒馆里喝一杯
 
-## 本地预览
+## 本地测试站点
 
 ```
 jekyll serve
@@ -40,6 +40,7 @@ GitHub Pages 默认支持 `Jekyll` (静态网站生成器)，可自动将项目�
 
 * [GitHub Pages 快速入门](https://docs.github.com/zh/pages/quickstart)
 * [Jekyll docs][jekyll-docs] 
+* [使用 Jekyll 在本地测试 GitHub Pages 站点](https://docs.github.com/zh/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll)
 
 [jekyll-docs]: https://jekyllrb.com/docs/home
 [jekyll-gh]:   https://github.com/jekyll/jekyll
