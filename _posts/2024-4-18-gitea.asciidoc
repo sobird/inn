@@ -1,0 +1,522 @@
+---
+layout: post
+title: Gitea搭建与配置
+date: 2024-4-18 10:45 +0800
+---
+
+> Gitea 是一个开源社区驱动的轻量级代码托管解决方案，后端采用 Go 编写，具有轻量级、支持多种部署方式、支持action等优点。
+
+## 安装
+
+### 1. Docker方式安装
+通过`docker compose`安装，新建`docker-compose.yml`文件：
+
+```yml
+version: "3"
+services:
+  server:
+    image: gitea/gitea:1.19.0
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+    volumes:
+      - ./gitea_data:/data
+    ports:
+      - "3000:3000"
+      - "10022:22"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    volumes:
+      - ./gitea_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  gitea_data:
+  gitea_postgres_data:
+```
+
+在 `docker-compose.yml` 所在的目录运行 `docker-compose up`
+
+### 其他方式安装
+
+其他安装方式或更换数据库类型，可自行查阅官方文档 [install-from-binary](https://docs.gitea.io/zh-cn/install-from-binary/)
+
+## 站点配置
+
+访问地址 http://127.0.0.1:3000，初次访问需要配置站点数据，之后就和github等代码仓库类似了。
+
+## Gitea Actions 搭建
+
+### 1. gitea开启actions
+
+修改gitea/conf/app.ini配置，若使用docker部署，可通过docker exec -it ${容器id} /bin/bash进入内部修改，修改完后重启 gitea 容器
+
+```yml
+# 添加此配置
+[actions]
+ENABLED = true
+```
+
+### 2. 查看Gitea Runner token
+
+访问 [Runners](http://localhost:3000/admin/actions/runners)，点击创建Runner会出现一个token，复制此token。
+
+### 3. 配置act runner
+
+基于上面的 `docker-compose.yml` 配置文件，加入以下配置：
+
+```
+version: "3"
+services:
+  gitea:
+    image: gitea/gitea:1.21.0
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+      - GITEA__database__DB_TYPE=postgres
+      - GITEA__database__HOST=db:5432
+      - GITEA__database__NAME=gitea
+      - GITEA__database__USER=gitea
+      - GITEA__database__PASSWD=gitea
+    networks:
+      - gitea_net
+    volumes:
+      - ./gitea_data:/data
+    ports:
+      - "3000:3000"
+      - "10022:22"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=gitea
+      - POSTGRES_PASSWORD=gitea
+      - POSTGRES_DB=gitea
+    networks:
+      - gitea_net
+    volumes:
+      - ./gitea_postgres_data:/var/lib/postgresql/data
+
+  act_runner:
+    image: gitea/act_runner:latest
+    container_name: act_runner
+    restart: always
+    depends_on:
+      - gitea
+    networks:
+      - gitea_net
+    environment:
+      # - CONFIG_FILE=/config.yaml
+      - GITEA_INSTANCE_URL=http://gitea:3000/
+      - GITEA_RUNNER_REGISTRATION_TOKEN=<token> # 复制的token
+      - GITEA_RUNNER_NAME=act_runner
+      # runs-on 的标签实际上是下面这个，上面的只是名字
+      # GITEA_RUNNER_LABELS: "ubuntu-latest"
+    volumes:
+      # - ./act_runner/config.yaml:/config.yaml
+      - ./act_runner/data:/data
+      - ./act_runner/cache:/root/.cache
+      - /var/run/docker.sock:/var/run/docker.sock
+
+# volumes:
+#   gitea_data:
+#   gitea_postgres_data:
+
+networks:
+  gitea_net:
+```
+
+### 4. 查看
+返回 [Runners](http://localhost:3000/admin/actions/runners) 管理面板即可看到加入的runner，且状态为 空闲
+
+## 测试
+
+### 1. 创建测试仓库
+创建名为 `actions-test` 的仓库，勾选初始化添加README.md，并在设置中开启 Actions ，即可看到多了 Actions 一栏。
+
+将仓库克隆到本地
+```sh
+git clone http://localhost:3000/sobird/actions-test.git
+```
+
+### 2. 添加工作流文件
+
+以下是一个示例，将它保存到 `.gitea/workflows/build.yaml` 时会触发 CI 工作，yaml 语法可参考 [Github Actions Docs](https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions)
+
+```yml
+name: Gitea Actions Test
+run-name: ${{ github.actor }} is testing out Gitea Actions  
+on: [push]
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "  The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "  This job is now running on a ${{ runner.os }} server hosted by Gitea!"
+      - run: echo "  The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: echo "  The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo " ️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "  This job's status is ${{ job.status }}."
+```
+
+提交 `.gitea/workflows/build.yaml` 到远程仓库
+
+```sh
+git add .
+git commit -m"chore: test actions"
+git push origin
+```
+
+### 查看运行结果
+
+当代码提交到远程仓库，即会触发上面配置的工作流，访问[actions](http://localhost:3000/sobird/actions-test/actions)进行查看。
+
+## 配置 config.yaml
+
+通过 `docker run --entrypoint="" --rm -it gitea/act_runner:latest act_runner generate-config > config.yaml` 生成
+
+将生成的配置文件拷贝到本地目录
+
+```sh
+docker cp 3d17a8d385b3:/config.yaml ./act_runner
+```
+
+```yml
+# Example configuration file, it's safe to copy this as the default config file without any modification.
+
+# You don't have to copy this file to your instance,
+# just run `./act_runner generate-config > config.yaml` to generate a config file.
+
+log:
+  # The level of logging, can be trace, debug, info, warn, error, fatal
+  level: info
+
+runner:
+  # Where to store the registration result.
+  file: .runner
+  # Execute how many tasks concurrently at the same time.
+  capacity: 1
+  # Extra environment variables to run jobs.
+  envs:
+    A_TEST_ENV_NAME_1: a_test_env_value_1
+    A_TEST_ENV_NAME_2: a_test_env_value_2
+  # Extra environment variables to run jobs from a file.
+  # It will be ignored if it's empty or the file doesn't exist.
+  env_file: .env
+  # The timeout for a job to be finished.
+  # Please note that the Gitea instance also has a timeout (3h by default) for the job.
+  # So the job could be stopped by the Gitea instance if it's timeout is shorter than this.
+  timeout: 3h
+  # Whether skip verifying the TLS certificate of the Gitea instance.
+  insecure: false
+  # The timeout for fetching the job from the Gitea instance.
+  fetch_timeout: 5s
+  # The interval for fetching the job from the Gitea instance.
+  fetch_interval: 2s
+  # The labels of a runner are used to determine which jobs the runner can run, and how to run them.
+  # Like: "macos-arm64:host" or "ubuntu-latest:docker://gitea/runner-images:ubuntu-latest"
+  # Find more images provided by Gitea at https://gitea.com/gitea/runner-images .
+  # If it's empty when registering, it will ask for inputting labels.
+  # If it's empty when execute `daemon`, will use labels in `.runner` file.
+  labels:
+    - "ubuntu-latest:docker://gitea/runner-images:ubuntu-latest"
+    - "ubuntu-22.04:docker://gitea/runner-images:ubuntu-22.04"
+    - "ubuntu-20.04:docker://gitea/runner-images:ubuntu-20.04"
+
+cache:
+  # Enable cache server to use actions/cache.
+  enabled: true
+  # The directory to store the cache data.
+  # If it's empty, the cache data will be stored in $HOME/.cache/actcache.
+  dir: ""
+  # The host of the cache server.
+  # It's not for the address to listen, but the address to connect from job containers.
+  # So 0.0.0.0 is a bad choice, leave it empty to detect automatically.
+  host: ""
+  # The port of the cache server.
+  # 0 means to use a random available port.
+  port: 0
+  # The external cache server URL. Valid only when enable is true.
+  # If it's specified, act_runner will use this URL as the ACTIONS_CACHE_URL rather than start a server by itself.
+  # The URL should generally end with "/".
+  external_server: ""
+
+container:
+  # Specifies the network to which the container will connect.
+  # Could be host, bridge or the name of a custom network.
+  # If it's empty, act_runner will create a network automatically.
+  network: "gitea_gitea_net"
+  # Whether to use privileged mode or not when launching task containers (privileged mode is required for Docker-in-Docker).
+  privileged: false
+  # And other options to be used when the container is started (eg, --add-host=my.gitea.url:host-gateway).
+  options:
+  # The parent directory of a job's working directory.
+  # NOTE: There is no need to add the first '/' of the path as act_runner will add it automatically. 
+  # If the path starts with '/', the '/' will be trimmed.
+  # For example, if the parent directory is /path/to/my/dir, workdir_parent should be path/to/my/dir
+  # If it's empty, /workspace will be used.
+  workdir_parent:
+  # Volumes (including bind mounts) can be mounted to containers. Glob syntax is supported, see https://github.com/gobwas/glob
+  # You can specify multiple volumes. If the sequence is empty, no volumes can be mounted.
+  # For example, if you only allow containers to mount the `data` volume and all the json files in `/src`, you should change the config to:
+  # valid_volumes:
+  #   - data
+  #   - /src/*.json
+  # If you want to allow any volume, please use the following configuration:
+  # valid_volumes:
+  #   - '**'
+  valid_volumes: []
+  # overrides the docker client host with the specified one.
+  # If it's empty, act_runner will find an available docker host automatically.
+  # If it's "-", act_runner will find an available docker host automatically, but the docker host won't be mounted to the job containers and service containers.
+  # If it's not empty or "-", the specified docker host will be used. An error will be returned if it doesn't work.
+  docker_host: ""
+  # Pull docker image(s) even if already present
+  force_pull: true
+  # Rebuild docker image(s) even if already present
+  force_rebuild: false
+
+host:
+  # The parent directory of a job's working directory.
+  # If it's empty, $HOME/.cache/act/ will be used.
+  workdir_parent:
+```
+
+需要注意的是，要配置container.network(如上所示)，否则工作流中的 `actions/checkout@v3` 无法签出代码。
+
+修改 `docker-compose.yml` 配置后，重启生效
+```yml
+...
+    environment:
+      - CONFIG_FILE=/config.yaml
+      - GITEA_INSTANCE_URL=http://gitea:3000/
+      - GITEA_RUNNER_REGISTRATION_TOKEN=<token> # 复制的token
+      - GITEA_RUNNER_NAME=act_runner
+      # runs-on 的标签实际上是下面这个，上面的只是名字
+      # GITEA_RUNNER_LABELS: "ubuntu-latest"
+    volumes:
+      - ./act_runner/config.yaml:/config.yaml
+      - ./act_runner/data:/data
+      - ./act_runner/cache:/root/.cache
+      - /var/run/docker.sock:/var/run/docker.sock
+...
+```
+
+## 使用变量
+### 1. 默认上下文变量
+在编写步骤文件时，可以直接使用默认的变量来实现想要的功能，语法为 ${{ xxx }}，具体有哪些变量可查看[Github Actions Context Docs](https://docs.github.com/zh/actions/learn-github-actions/contexts#github-context)
+
+```yml
+- run: echo ${{ github.ref }}
+- run: echo ${{ github.repository }}
+```
+
+输出
+```sh
+refs/heads/main
+seepine/actions-test
+```
+
+### 2. 环境变量
+环境变量分为默认环境变量和自定义环境变量，语法为 ${{ env.xxx }}，具体请查看[Github Actions Variables Docs](https://docs.github.com/zh/actions/learn-github-actions/variables#default-environment-variables)
+
+```yml
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: ubuntu-latest
+    # 自定义方式一
+    env:
+      CUSTOM_KEY: custom env value
+    steps:
+      # 自定义方式二
+      - run: echo CUSTOM_TOKEN=asdf1234 >> $GITHUB_ENV
+
+      - run: echo ${{ env.GITHUB_ACTION_REPOSITORY }}
+      - run: echo ${{ env.CUSTOM_KEY }}
+      - run: echo ${{ env.CUSTOM_TOKEN }}
+```
+
+输出
+
+```sh
+sobird/actions-test
+custom env value
+asdf1234
+```
+
+### 3. Secrets变量
+一般用于定义密码等敏感变量，此变量输出时会变成*，但不影响使用，在设置-Secrets中添加Key-Value即可
+
+```yml
+- run: echo ${{ secrets.CUSTOM_KEY }}
+```
+
+输出
+
+```sh
+***
+```
+
+### 4. output
+许多时候我们会需要输出一些特定内容供他人获取，若输出到环境变量，我们很难随心定义key，因为有可能会与其他步骤的环境变量冲突而覆盖它，因此出现了output这个用法，最常见的即 [Docker metadata](https://github.com/docker/metadata-action)
+
+```yml
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Gen Meta
+        id: my_meta # 指定一个id
+        run: echo CUSTOM_TOKEN=asdf1234 >> $GITHUB_OUTPUT
+
+      - run: echo ${{ steps.my_meta.outputs.CUSTOM_TOKEN }}
+```
+
+输出
+
+```sh
+asdf1234
+```
+
+## 进阶用法
+### 1. 指定工作流运行 runner
+若有多个runner节点，我们想指定某个工作流程运行在特定runner上，可在不同runner指定不同label用于区分（可在Runner管理面板，编辑其 labels），例如分别有两个 runner 是 linux 环境和 windows 环境，因此分别设置label为 `linux_runner`和 `windows_runner`。
+
+```yml
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: linux_runner
+    runs-on: windows_runner
+```
+
+### 2. 使用Github的步骤脚本
+在编写步骤配置时，通常都会引用别人写好的脚本，例如
+
+```yml
+- name: Login to DockerHub
+  uses: docker/login-action@v2
+
+- name: Login to DockerHub
+  uses: my_custom/other-action@v2
+```
+
+此时 Gitea Actions 不一定能正常工作，因为它在
+
+< 1.20 默认是访问 Gitea.com这个代码托管仓库，因此若脚本是在 Github 上时，它将无法下载脚本内容
+\>= 1.20 默认访问 Github.com
+
+所以当出现下载有问题时，我们可以完整写明脚本地址，例如
+
+```yml
+- name: Login to DockerHub
+  uses: https://github.com/my_custom/other-action@v2
+```
+
+也可以通过修改gitea的`app.ini`配置，改为从相应的仓库下载
+
+```yml
+[actions]
+# 1.19 可直接填写任意url如：https://github.com
+# 1.20起，不填默认从 github，填self表示从自建仓库下载
+DEFAULT_ACTIONS_URL = self
+```
+
+### 3. 使用 docker
+在 Github Actions 中，默认工作环境可以直接使用 `docker` 命令，因此网上搜的 Github actions 构建 docker 镜像等配置，放在 Gitea Actions 中运行不了，因为 gitea act_runner 默认运行镜像是 `node:16-bullseye` ，并没有 docker 环境，详见工单[Gitea act_runner issue](https://gitea.com/gitea/act_runner/issues/63#issuecomment-733637)，最简单的解决办法是手动指定运行容器镜像。
+
+```sh
+jobs:
+  My-Gitea-Actions:
+    runs-on: ubuntu-latest
+    # 此容器可使用docker，可查看 https://github.com/catthehacker/docker_images
+    container: catthehacker/ubuntu:act-latest
+    steps:
+      - run: docker version
+```
+
+在我本地Mac测试，不指定容器，也可运行 `docker version`
+
+### 4. 缓存工具目录
+在步骤中安装构建工具时，例如`actions-setup`、`actions-node`等，它们都会去下载对应二进制文件，再解压到例如 `/opt/hostedtoolcache` 目录中，最后再配置环境变量，使得容器中能够使用相应的环境，例如
+
+```yml
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      # 安装node环境
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - run: node -v
+```
+
+你会发现，每次执行工作流时，它都会重新下载二进制文件，并不会像 Github Actions 一样第一次下载，第二次因有缓存直接跳过，详情可查看工单[cache tool folder](https://gitea.com/gitea/act_runner/issues/70)，在 act_runner 修复此问题之前，我们可以指定环境变量 RUNNER_TOOL_CACHE 或借助 docker volume 来实现缓存功能
+
+```yml
+jobs:
+  Explore-Gitea-Actions:
+    runs-on: ubuntu-latest
+    container: 
+      image: catthehacker/ubuntu:act-latest
+      # 方法二，手动指定持久化目录
+      volumes:
+        - ubuntu_hostedtoolcache:/opt/hostedtoolcache
+    env:
+      # 方法一，指定容器将工具缓存路径存放到 /toolcache ，该目录actRunner会默认持久化它
+      RUNNER_TOOL_CACHE: /toolcache
+    steps:
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - run: java -version
+```
+
+目前，gitean已经解决此问题，无需特殊配置。
+
+### 5. 支持多任务运行
+
+修改 config.yaml 配置
+
+```yml
+runner:
+  # 修改此数字，3表示同时支持3个任务并行，数量最好根据你机器性能和所跑任务负载统一决定，并不是越高越好
+  capacity: 3
+```
+
+### 6. 使用 actions/cache 超时
+
+如果是通过docker部署的 act_runner ，因为容器隔离特性，其他运行的任务容器，无法访问到 act_runner 的cache相关服务，所以需要暴露出对应端口。
+
+已可用，无需配置
+
+## 参考
+
+* [Gitea - 搭建属于自己的代码仓库](https://seepine.com/git/gitea/starter/)
+* [Gitea Actions 搭建](https://seepine.com/git/gitea/actions/)
