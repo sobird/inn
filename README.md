@@ -1,7 +1,7 @@
 # 小酒馆 🍷
 > 工作之余不妨来小酒馆里喝一杯
 
-## 本地启动
+## 本地预览
 
 ```
 jekyll serve
@@ -9,13 +9,17 @@ jekyll serve
 
 ## Jekyll
 
-Jekyll requires blog post files to be named according to the following format:
+Jekyll 要求博客文章的文件名按照以下格式命名：
 
 `YEAR-MONTH-DAY-title.MARKUP`
 
-Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit numbers, and `MARKUP` is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+* **YEAR** 4位数字，表示年份
+* **MONTH** 2位数字，表示月份
+* **DAY** 2为数字，表示日期
+* **MARKUP** 表示文件扩展名
 
-Jekyll also offers powerful support for code snippets:
+Jekyll 还提供了对代码片段的强大支持：
+
 
 ```ruby
 def print_hi(name)
@@ -25,7 +29,17 @@ print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
 ```
 
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
+## GitHub Pages
+
+GitHub Pages 默认支持 `Jekyll` (静态网站生成器)，可自动将项目托管在 [GitHub Pages](https://pages.github.com/)，当然也可以使用其他静态站点生成器或者在本地或其他服务器上自定义构建发布过程。
+
+* [支持的主题](https://pages.github.com/themes/)
+* [支持的插件](https://pages.github.com/versions/)
+
+## 参考
+
+* [GitHub Pages 快速入门](https://docs.github.com/zh/pages/quickstart)
+* [Jekyll docs][jekyll-docs] 
 
 [jekyll-docs]: https://jekyllrb.com/docs/home
 [jekyll-gh]:   https://github.com/jekyll/jekyll
