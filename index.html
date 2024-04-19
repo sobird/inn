@@ -1,0 +1,56 @@
+---
+# Feel free to add content and custom Front Matter to this file.
+# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
+
+layout: default
+---
+
+<div class="posts">
+  <!-- This loops through the paginated posts -->
+  {%- for post in paginator.posts -%}
+  <div class="post">
+    <h3 class="post-title">
+      <a class="post-link" href="{{ post.url | relative_url }}">
+        {{ post.title | escape }}
+      </a>
+    </h3>
+    {%- assign date_format = site.date_format | default: "%b %-d, %Y" -%}
+    <p class="post-meta">
+      <time class="post-date" datetime="{{ post.date | date_to_xmlschema }}">
+        {{ post.date | date: date_format }}
+      </time>
+      {%- if post.author -%} - <span class="post-author">{{ post.author }}</span>{%- endif -%}
+    </p>
+    {%- if site.show_excerpts -%}
+    {{ post.excerpt }}
+    {%- endif -%}
+  </div>
+  {%- endfor -%}
+
+  <!-- Pagination links -->
+  {% if paginator.total_pages > 1 %}
+  <div class="pagination">
+    {% if paginator.previous_page %}
+      <a href="{{ paginator.previous_page_path | relative_url }}">&laquo; 上一页</a>
+    {% else %}
+      
+    {% endif %}
+  
+    {% for page in (1..paginator.total_pages) %}
+      {% if page == paginator.page %}
+        <span>{{ page }}</span>
+      {% elsif page == 1 %}
+        <a href="{{ '/' | relative_url }}">{{ page }}</a>
+      {% else %}
+        <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}">{{ page }}</a>
+      {% endif %}
+    {% endfor %}
+  
+    {% if paginator.next_page %}
+      <a href="{{ paginator.next_page_path | relative_url }}">下一页 &raquo;</a>
+    {% else %}
+      
+    {% endif %}
+  </div>
+  {% endif %}
+</div>

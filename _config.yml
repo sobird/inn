@@ -56,6 +56,6 @@ plugins:
 #   - vendor/gems/
 #   - vendor/ruby/
 
-paginate: 5
+paginate: 20
 
 date_format: "%Y年%-m月%-d日"

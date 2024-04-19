@@ -280,4 +280,16 @@ footer {
   
 }
 
+// 分页
+.pagination {
+  text-align: center;
+  a {
+    padding: 3px 8px;
+    border-radius: 3px;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+}
+
 @import "post.scss"
