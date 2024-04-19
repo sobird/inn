@@ -1,7 +1,8 @@
 ---
-layout: default
+layout: post
 title: Dependabot配置使用
 date: 2024-4-17 15:57 +0800
+author: Sobird
 ---
 
 Dependabot 是 GitHub 提供的一个自动化工具，它帮助开发者管理和更新他们的项目依赖项。通过定期检查依赖库的更新，Dependabot 可以创建拉取请求（Pull Requests, PRs）来更新过时的依赖，从而帮助项目保持最新，减少安全漏洞和兼容性问题的风险。

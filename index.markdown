@@ -5,21 +5,24 @@
 layout: default
 ---
 
-<div>
-<ul>
+<div class="posts">
   {%- for post in site.posts -%}
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
+      <div class="post">
+        <h3 class="post-title">
           <a class="post-link" href="{{ post.url | relative_url }}">
             {{ post.title | escape }}
           </a>
         </h3>
+        {%- assign date_format = site.date_format | default: "%b %-d, %Y" -%}
+        <p class="post-meta">
+          <time class="post-date" datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: date_format }}
+          </time>
+          {%- if post.author -%} - <span class="post-author">{{ post.author }}</span>{%- endif -%}
+        </p>
         {%- if site.show_excerpts -%}
           {{ post.excerpt }}
         {%- endif -%}
-      </li>
-      {%- endfor -%}
-</ul>
+      </div>
+  {%- endfor -%}
 </div>

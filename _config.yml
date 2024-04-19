@@ -57,3 +57,5 @@ plugins:
 #   - vendor/ruby/
 
 paginate: 5
+
+date_format: "%Y年%-m月%-d日"
