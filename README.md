@@ -92,8 +92,13 @@ Subcommands:
 jekyll new my-jekyll
 
 cd my-jekyll
+
+# 初始化 Gemfile
+bundle init
+# 添加依赖包
+bundle add jekyll
 # 安装依赖
-bundle install
+bundle update(install)
 # 本地启动站点
 bundle exec jekyll serve
 ```
