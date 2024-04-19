@@ -9,6 +9,57 @@ jekyll serve
 
 ## Jekyll
 
+### 环境要求
+
+* Ruby version 2.5.0 or higher 查看版本 `ruby -v`
+* RubyGems ruby 的包管理器，查看版本 `gem -v`
+* GCC and Make 查看版本 `gcc -v`, `g++ -v`, and `make -v`
+* Bundler 管理 Ruby 应用程序依赖的框架，查看版本 `bundle -v`
+
+### 安装 ruby
+
+```sh
+# 查看ruby版本, 这是macOS自带的ruby不建议使用，
+/usr/bin/ruby -v
+ruby 2.6.10p210 (2022-04-12 revision 67958) [universal.x86_64-darwin21]
+
+# 查看gem版本
+/usr/bin/gem -v
+3.0.3.1
+
+# 使用brew安装新的ruby
+brew install ruby
+# 查看安装后的版本
+ruby -v
+ruby 3.3.0 (2023-12-25 revision 5124f9ac75) [x86_64-darwin21]
+
+gem -v
+3.5.4
+
+# 升级gem到最新版本
+gem update --system 3.5.9
+```
+
+### 安装jekyll 和 bundler
+
+```sh
+gem install jekyll bundler
+
+# 查看 jekyll 版本
+jekyll -v 
+jekyll 4.3.3
+
+# 查看 bundler 版本
+bundler -v
+Bundler version 2.5.9
+```
+
+
+```sh
+bundle exec jekyll serve
+```
+
+
 Jekyll 要求博客文章的文件名按照以下格式命名：
 
 `YEAR-MONTH-DAY-title.MARKUP`
