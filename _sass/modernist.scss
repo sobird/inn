@@ -292,4 +292,28 @@ footer {
   }
 }
 
-@import "post.scss"
+@import "post.scss";
+
+// 语法高亮
+
+figure.highlight {
+  margin: 0;
+
+  pre {
+    
+  }
+
+  .rouge-table {
+    .gutter {
+      .lineno {
+        
+      }
+    }
+    pre {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+@import "rouge-base16-dark";
