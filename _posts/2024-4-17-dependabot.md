@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: default
 title: Dependabot配置使用
 date: 2024-4-17 15:57 +0800
 ---
