@@ -123,6 +123,18 @@ print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
 ```
 
+## 语法高亮
+Jekyll 3以上的版本默认集成了[Rouge](https://github.com/rouge-ruby/rouge)语法高亮组件。
+
+### 安装 rouge
+
+```sh
+gem install rouge
+
+# 使用rougify命令生成样式文件
+rougify style monokai.sublime > syntax.css
+```
+
 ## GitHub Pages
 
 GitHub Pages 默认支持 `Jekyll` (静态网站生成器)，可自动将项目托管在 [GitHub Pages](https://pages.github.com/)，当然也可以使用其他静态站点生成器或者在本地或其他服务器上自定义构建发布过程。
